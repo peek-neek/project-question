@@ -100,7 +100,12 @@ export async function submitQuestions(
     target.questions.push({ id: String(++nextId), ...qa })
   }
 
-  await saveQuestionTypes(types)
+  try {
+    await saveQuestionTypes(types)
+  } catch (err) {
+    console.error("Failed to save questions", err)
+    return { error: "Couldn't save on the server. Storage may be read-only." }
+  }
   revalidatePath("/", "layout")
   redirect(`/${target.slug}`)
 }

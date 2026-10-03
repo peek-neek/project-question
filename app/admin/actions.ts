@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 
-import { COLOR_PALETTE } from "@/components/constant/data"
+import { COLOR_PALETTE, type QuestionType } from "@/components/constant/data"
 import {
   getQuestionTypes,
   saveQuestionTypes,
@@ -41,26 +41,46 @@ export async function lockAdmin() {
   revalidatePath("/", "layout")
 }
 
-// Server actions are public endpoints, so each one re-checks the session
-async function requireAdmin() {
-  if (!(await isAdmin())) throw new Error("Not authorized")
-}
+// Server actions are public endpoints, so each one re-checks the session.
+// Failures are returned rather than thrown: in production Next.js replaces
+// thrown error messages with an opaque digest, so the UI couldn't tell why.
+const SESSION_EXPIRED =
+  "Your admin session has expired. Turn admin off and on again."
 
-export async function deleteQuestionType(slug: string) {
-  await requireAdmin()
-  const types = await getQuestionTypes()
-  await saveQuestionTypes(types.filter((type) => type.slug !== slug))
+// Saves and revalidates, translating storage failures into a readable error
+async function persist(types: QuestionType[]): Promise<EditResult> {
+  try {
+    await saveQuestionTypes(types)
+  } catch (err) {
+    console.error("Failed to save questions", err)
+    const code = (err as NodeJS.ErrnoException).code
+    return {
+      error:
+        code === "EROFS" || code === "EACCES" || code === "EPERM"
+          ? "The server can't write to its data file (read-only storage), so changes can't be saved on this host."
+          : "Couldn't save changes on the server.",
+    }
+  }
   revalidatePath("/", "layout")
+  return { error: null }
 }
 
-export async function deleteQuestion(slug: string, questionId: string) {
-  await requireAdmin()
+export async function deleteQuestionType(slug: string): Promise<EditResult> {
+  if (!(await isAdmin())) return { error: SESSION_EXPIRED }
+  const types = await getQuestionTypes()
+  return persist(types.filter((type) => type.slug !== slug))
+}
+
+export async function deleteQuestion(
+  slug: string,
+  questionId: string
+): Promise<EditResult> {
+  if (!(await isAdmin())) return { error: SESSION_EXPIRED }
   const types = await getQuestionTypes()
   const type = types.find((type) => type.slug === slug)
-  if (!type) return
+  if (!type) return { error: "This category no longer exists." }
   type.questions = type.questions.filter((qa) => qa.id !== questionId)
-  await saveQuestionTypes(types)
-  revalidatePath("/", "layout")
+  return persist(types)
 }
 
 // Slug is deliberately left unchanged so existing links keep working
@@ -68,7 +88,7 @@ export async function updateQuestionType(
   slug: string,
   input: { label: string; icon: string; color: string }
 ): Promise<EditResult> {
-  await requireAdmin()
+  if (!(await isAdmin())) return { error: SESSION_EXPIRED }
   const label = input.label.trim()
   const icon = input.icon.trim() || "📁"
   if (!label) return { error: "Name can't be empty." }
@@ -84,9 +104,7 @@ export async function updateQuestionType(
   if (clash) return { error: `"${clash.label}" already exists.` }
 
   Object.assign(type, { label, icon, color: input.color })
-  await saveQuestionTypes(types)
-  revalidatePath("/", "layout")
-  return { error: null }
+  return persist(types)
 }
 
 export async function updateQuestion(
@@ -94,7 +112,7 @@ export async function updateQuestion(
   questionId: string,
   input: { question: string; answer: string }
 ): Promise<EditResult> {
-  await requireAdmin()
+  if (!(await isAdmin())) return { error: SESSION_EXPIRED }
   const question = input.question.trim()
   const answer = input.answer.trim()
   if (!question || !answer) {
@@ -108,7 +126,5 @@ export async function updateQuestion(
   if (!qa) return { error: "This question no longer exists." }
 
   Object.assign(qa, { question, answer })
-  await saveQuestionTypes(types)
-  revalidatePath("/", "layout")
-  return { error: null }
+  return persist(types)
 }

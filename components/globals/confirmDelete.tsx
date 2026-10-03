@@ -4,6 +4,7 @@ import { useState, useTransition } from "react"
 import { AlertDialog } from "radix-ui"
 import { Trash2Icon } from "lucide-react"
 
+import type { EditResult } from "@/app/admin/actions"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -15,7 +16,7 @@ export default function ConfirmDelete({
   label,
   className,
 }: {
-  action: () => Promise<void>
+  action: () => Promise<EditResult>
   title: string
   description: string
   // Accessible name for the icon button
@@ -30,10 +31,11 @@ export default function ConfirmDelete({
     setError(null)
     startTransition(async () => {
       try {
-        await action()
-        setOpen(false)
+        const result = await action()
+        if (result.error) setError(result.error)
+        else setOpen(false)
       } catch {
-        setError("Couldn't delete. Your admin session may have expired.")
+        setError("Couldn't reach the server. Please try again.")
       }
     })
   }

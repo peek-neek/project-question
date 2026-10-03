@@ -59,7 +59,7 @@ function EditDialog({
         if (result.error) setError(result.error)
         else setOpen(false)
       } catch {
-        setError("Couldn't save. Your admin session may have expired.")
+        setError("Couldn't reach the server. Please try again.")
       }
     })
   }

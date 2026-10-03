@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "slug": "estimates",
+    "label": "Estimates",
+    "icon": "💰",
+    "color": "bg-emerald-400 hover:bg-emerald-500",
+    "questions": [
+      {
+        "id": "1",
+        "question": "❓ What is this appointment for?",
+        "answer": "The appointment is for the estimator to come out, take a look at the project in person, go over the details with you, and answer any questions you may have. They’ll assess the work needed so they can provide you with accurate pricing based on the actual project."
+      },
+      {
+        "id": "2",
+        "question": "❓ Why can’t I get the estimate over the phone?",
+        "answer": "There are several factors that go into pricing, and the estimator needs to see the project in person to properly assess the work, measurements, materials, and any details that could affect the price. That’s why the estimate is done on-site rather than over the phone."
+      },
+      {
+        "id": "3",
+        "question": "❓ Why can’t I talk to the estimator directly?",
+        "answer": "The estimators are usually out in the field meeting with customers, so they’re not available to take calls while they’re working. I can communicate with them through our system and make sure your information gets to them, and they can return your call when they’re available."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "subcontractor-local-office",
+    "label": "Subcontractor & Local Office",
+    "icon": "🏢",
+    "color": "bg-violet-400 hover:bg-violet-500",
+    "questions": [
+      {
+        "id": "1",
+        "question": "❓ Are you a subcontractor?",
+        "answer": "No, we aren’t a subcontractor.\n\nWe are the direct scheduling team for [Company Name]. We handle their calls and calendar management, while the local estimators handle the work in the field."
+      },
+      {
+        "id": "2",
+        "question": "❓ So, who are the estimators?",
+        "answer": "The estimators are independent contractors who work with [Company Name] on the projects. They’re usually out in the field or working from their trucks, so I can communicate with them through our system and have them return your call when they’re available.\n\nIndependent contractors do the work as subcontractors."
+      },
+      {
+        "id": "3",
+        "question": "❓ So there’s no local office?",
+        "answer": "Correct. The estimators don’t have a traditional brick-and-mortar office. Most of them work out of their trucks while they’re in the field, so I’m not able to transfer calls to them while they’re working. I can communicate with them directly through our system, though, and they’ll return your call as soon as they’re available."
+      }
+    ]
+  }
+]

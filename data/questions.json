@@ -20,6 +20,11 @@
         "id": "3",
         "question": "❓ Why can’t I talk to the estimator directly?",
         "answer": "The estimators are usually out in the field meeting with customers, so they’re not available to take calls while they’re working. I can communicate with them through our system and make sure your information gets to them, and they can return your call when they’re available."
+      },
+      {
+        "id": "4",
+        "question": "WHY DO THEY HAVE TO COME INTO MY HOME?",
+        "answer": "There are several factors that go into pricing, and the estimator needs to see the project in person to properly assess the work, measurements, materials, and any details that could affect the price. That’s why the estimate is done on-site rather than over the phone."
       }
     ]
   },
@@ -44,6 +49,50 @@
         "id": "3",
         "question": "❓ So there’s no local office?",
         "answer": "Correct. The estimators don’t have a traditional brick-and-mortar office. Most of them work out of their trucks while they’re in the field, so I’m not able to transfer calls to them while they’re working. I can communicate with them directly through our system, though, and they’ll return your call as soon as they’re available."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "job-inquiries",
+    "label": "Job Inquiries",
+    "icon": "👔",
+    "color": "bg-blue-400 hover:bg-blue-500",
+    "questions": [
+      {
+        "id": "1",
+        "question": "Are you hiring?",
+        "answer": "I can take down your information and pass it along to our back office. May I get your name, email address, and postal code?"
+      },
+      {
+        "id": "2",
+        "question": "I’m calling about a job I saw posted",
+        "answer": "Absolutely. I can gather your information and send it to our back office. What position are you interested in?"
+      },
+      {
+        "id": "3",
+        "question": "I already applied on Indeed. I’m calling to follow up.",
+        "answer": "I can take down your information and make a note that you’re following up on your application. May I get your name, email address, and postal code?"
+      },
+      {
+        "id": "4",
+        "question": "Can I send my résumé / application?",
+        "answer": "I can gather your information and make a note of what you're looking for, then send it to our back office."
+      },
+      {
+        "id": "5",
+        "question": "Can you check the status of my application?",
+        "answer": "I don't have access to the hiring process directly, but I can take down your information and note that you're looking for an update."
+      },
+      {
+        "id": "6",
+        "question": "What information do you need from me?",
+        "answer": "I'll just need your name, email address, postal code, and a note about the position or opportunity you're interested in."
+      },
+      {
+        "id": "7",
+        "question": "What happens after I give you my information?",
+        "answer": "I'll document your information and send it to our back office so they can review your inquiry."
       }
     ]
   }

@@ -42,7 +42,9 @@ export default async function Page(props: PageProps<"/[questionTypeId]">) {
             <ArrowLeftIcon className="size-4" />
             <span className={cn("size-3 rounded-full", type.color)} />
             <h1 className="text-xl font-semibold">
-              <span aria-hidden>{type.icon}</span> {type.label}
+              <span aria-hidden className="hidden md:inline">
+                {type.icon} {type.label}
+              </span>
             </h1>
           </Link>
         }

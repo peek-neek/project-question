@@ -8,6 +8,7 @@ import { deleteQuestion } from "@/app/admin/actions"
 import type { QuestionAnswer, QuestionType } from "@/components/constant/data"
 import AdminToggle from "@/components/globals/adminToggle"
 import ConfirmDelete from "@/components/globals/confirmDelete"
+import { EditQuestion } from "@/components/globals/editDialogs"
 
 export default function QuestionTypes({
   type,
@@ -61,9 +62,7 @@ export default function QuestionTypes({
                 qa={qa}
                 pattern={pattern}
                 onOpen={() => setActive(qa)}
-                onDelete={
-                  isAdmin ? () => deleteQuestion(type.slug, qa.id) : undefined
-                }
+                adminSlug={isAdmin ? type.slug : undefined}
               />
             ))}
           </div>
@@ -137,13 +136,13 @@ function QuestionCard({
   qa,
   pattern,
   onOpen,
-  onDelete,
+  adminSlug,
 }: {
   qa: QuestionAnswer
   pattern: RegExp | null
   onOpen: () => void
-  // Only passed in admin mode
-  onDelete?: () => Promise<void>
+  // Category slug, only passed in admin mode to show edit/delete
+  adminSlug?: string
 }) {
   const answerRef = useRef<HTMLParagraphElement>(null)
   const [truncated, setTruncated] = useState(false)
@@ -167,14 +166,21 @@ function QuestionCard({
         <h3 className="font-medium">
           <Highlight text={qa.question} pattern={pattern} />
         </h3>
-        {onDelete && (
-          <ConfirmDelete
-            action={onDelete}
-            title="Delete this question?"
-            description={qa.question}
-            label={`Delete question: ${qa.question}`}
-            className="-mt-0.5 -mr-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-          />
+        {adminSlug && (
+          <div className="-mt-0.5 -mr-1 flex shrink-0">
+            <EditQuestion
+              slug={adminSlug}
+              qa={qa}
+              className="text-muted-foreground hover:bg-muted hover:text-foreground"
+            />
+            <ConfirmDelete
+              action={() => deleteQuestion(adminSlug, qa.id)}
+              title="Delete this question?"
+              description={qa.question}
+              label={`Delete question: ${qa.question}`}
+              className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+            />
+          </div>
         )}
       </div>
       <p

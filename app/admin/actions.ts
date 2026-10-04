@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache"
 
 import { COLOR_PALETTE, type QuestionType } from "@/components/constant/data"
 import {
+  STORAGE_MISSING,
   getQuestionTypes,
   saveQuestionTypes,
 } from "@/components/constant/store"
@@ -49,6 +50,7 @@ const SESSION_EXPIRED =
 
 // Saves and revalidates, translating storage failures into a readable error
 async function persist(types: QuestionType[]): Promise<EditResult> {
+  if (STORAGE_MISSING) return { error: STORAGE_MISSING }
   try {
     await saveQuestionTypes(types)
   } catch (err) {

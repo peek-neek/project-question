@@ -10,6 +10,7 @@ import {
   type QuestionType,
 } from "@/components/constant/data"
 import {
+  STORAGE_MISSING,
   getQuestionTypes,
   saveQuestionTypes,
 } from "@/components/constant/store"
@@ -100,6 +101,7 @@ export async function submitQuestions(
     target.questions.push({ id: String(++nextId), ...qa })
   }
 
+  if (STORAGE_MISSING) return { error: STORAGE_MISSING }
   try {
     await saveQuestionTypes(types)
   } catch (err) {

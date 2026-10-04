@@ -11,11 +11,28 @@ import seed from "@/data/questions.json"
 // - data/questions.json otherwise (local development).
 const REDIS_KEY = "question-types"
 
-const hasRedis = Boolean(
-  (process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL) &&
-  (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN)
-)
-const redis = hasRedis ? Redis.fromEnv() : null
+// Vercel's Upstash integration may add a custom prefix to the variable names
+// (e.g. STORAGE_KV_REST_API_URL), so match on the suffix
+function findEnv(suffixes: string[]) {
+  const key = Object.keys(process.env).find((name) =>
+    suffixes.some((suffix) => name.endsWith(suffix))
+  )
+  return key ? process.env[key] : undefined
+}
+
+const redisUrl = findEnv(["UPSTASH_REDIS_REST_URL", "KV_REST_API_URL"])
+const redisToken = findEnv(["UPSTASH_REDIS_REST_TOKEN", "KV_REST_API_TOKEN"])
+const redis =
+  redisUrl && redisToken
+    ? new Redis({ url: redisUrl, token: redisToken })
+    : null
+
+// On Vercel the file fallback can never be written, so saving must fail
+// with a setup hint instead of a generic read-only error
+export const STORAGE_MISSING =
+  !redis && process.env.VERCEL
+    ? "No Redis connection found. In Vercel, connect Upstash for Redis to this project (Production environment) and redeploy."
+    : null
 
 const DATA_FILE = path.join(process.cwd(), "data", "questions.json")
 

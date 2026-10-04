@@ -56,10 +56,11 @@ export default function QuestionTypes({
         <div className="overflow-hidden rounded-2xl border">
           {/* Negative margins push the outer cell borders under the clipped edge */}
           <div className="-mr-px -mb-px grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {type.questions.map((qa) => (
+            {type.questions.map((qa, index) => (
               <QuestionCard
                 key={qa.id}
                 qa={qa}
+                number={index + 1}
                 pattern={pattern}
                 onOpen={() => setActive(qa)}
                 adminSlug={isAdmin ? type.slug : undefined}
@@ -134,11 +135,14 @@ function Highlight({
 
 function QuestionCard({
   qa,
+  number,
   pattern,
   onOpen,
   adminSlug,
 }: {
   qa: QuestionAnswer
+  // Display position, 1-based (ids can have gaps after deletes)
+  number: number
   pattern: RegExp | null
   onOpen: () => void
   // Category slug, only passed in admin mode to show edit/delete
@@ -164,6 +168,7 @@ function QuestionCard({
     <div className="relative flex min-h-48 flex-col border-r border-b p-5 transition-colors has-[[data-overlay]:focus-visible]:bg-muted/50 has-[[data-overlay]:hover]:bg-muted/50">
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-medium">
+          <span className="text-muted-foreground tabular-nums">{number}.</span>{" "}
           <Highlight text={qa.question} pattern={pattern} />
         </h3>
         {adminSlug && (

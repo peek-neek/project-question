@@ -21,7 +21,7 @@ export default async function Homepage() {
           the first column). md+: a single centered row. Tiles stretch to the
           tallest in their row, so admin mode grows them evenly */}
       <div className="grid grid-cols-[repeat(2,9rem)] justify-center gap-3 md:flex md:w-full md:max-w-6xl md:flex-wrap">
-        {types.map((type) => (
+        {types.map((type, index) => (
           // The link is stretched over the tile so the edit/delete buttons can sit
           // inside it without nesting a <button> in an <a>
           <div
@@ -39,7 +39,9 @@ export default async function Homepage() {
             <span className="text-2xl" aria-hidden>
               {type.icon}
             </span>
-            <span>{type.label}</span>
+            <span>
+              <span className="opacity-80">{index + 1}.</span> {type.label}
+            </span>
             {admin && (
               <div className="-mb-1 flex items-center gap-1">
                 <EditQuestionType
